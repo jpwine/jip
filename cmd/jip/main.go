@@ -148,6 +148,9 @@ func main() {
 	for _, str := range(tidyStrings(args, *kvMode, *lineSplit)) {
 		jsonKvObj := make(map[string]interface{})
 		jsonListObj := []interface{}{}
+		if str == "" {
+			continue
+		}
 		if kvJsonErr := json.Unmarshal([]byte(str), &jsonKvObj); kvJsonErr == nil {
 			if *kvMode && *mergeObjects {
 				for key := range(jsonKvObj) {
