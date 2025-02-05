@@ -133,10 +133,15 @@ func main() {
 	kvMode := flag.Bool("kv", false, "Enable key-value mode")
 	lineSplit := flag.Bool("line-split", false, "Enable line-split mode")
 	mergeObjects := flag.Bool("merge", false, "Enable merge mode")
+	printVersion := flag.Bool("version", false, "Print version")
 	flag.Parse()
 	args := flag.Args()
 
 	// 引数チェック
+	if *printVersion {
+		println( "0.2.2" )
+		os.Exit(0)
+	}
 	if len(args) == 0 {
 		flag.Usage()
 		os.Exit(1)
@@ -149,7 +154,11 @@ func main() {
 		jsonKvObj := make(map[string]interface{})
 		jsonListObj := []interface{}{}
 		if str == "" {
-			continue
+			if *kvMode && len(objs_kv) == 0 {
+				continue
+			} else if !*kvMode && len(objs_list) == 0 {
+				continue
+			}
 		}
 		if kvJsonErr := json.Unmarshal([]byte(str), &jsonKvObj); kvJsonErr == nil {
 			if *kvMode && *mergeObjects {
